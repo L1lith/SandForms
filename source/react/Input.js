@@ -68,7 +68,7 @@ class Input extends Component {
     const {value} = this.input
     if (typeof value != 'string') return // Not A String Input
     try {
-      sanitize(, this.sandhands)
+      sanitize(value, this.sandhands)
     } catch (error) {
       if (this.options.onError) this.options.onError(error.message)
       return error
