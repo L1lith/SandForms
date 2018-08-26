@@ -12,6 +12,7 @@ function interpretChildren(inputChildren, hook) {
       if (child.type === 'input') props._hook = hook
       return createElement(elementMap[child.type], props)
     }
+    return cloneElement(child, props)
   })
 }
 
