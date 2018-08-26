@@ -16,7 +16,8 @@ class Input extends Component {
     if (this.childProps.vanilla === true || (typeof this.childProps.type == 'string' && !allowedInputTypes.includes(this.childProps.type))) {
       this.options = { vanilla: true }
       delete this.childProps.vanilla
-      return;
+      delete this.childProps._hook
+      return
     }
     // Interpret the options from the props
     this.options = {}
@@ -29,7 +30,7 @@ class Input extends Component {
         this.options[prop] = this.childProps[prop]
         delete this.childProps[prop]
       }
-    });
+    })
     this.useSandhands = Object.keys(this.sandhands).length > 0
     if (typeof this.childProps._hook == "function") this.childProps._hook(this)
     delete this.childProps._hook
@@ -39,7 +40,7 @@ class Input extends Component {
       this.childProps.ref = ref => {
         propRefHandler(ref)
         this.input = ref
-      };
+      }
     } else {
       this.childProps.ref = ref => (this.input = ref)
     }
@@ -47,25 +48,12 @@ class Input extends Component {
   validateOptions() {
     const { vanilla, validate, onError } = this.options
     if (this.options.hasOwnProperty("vanilla") && typeof vanilla != "boolean") throw new Error("Vanilla must be a boolean value")
-    if (
-      this.options.hasOwnProperty("validate") &&
-      validate !== null &&
-      !(
-        typeof validate == "object" ||
-        typeof validate == "function" ||
-        (Array.isArray(validate) &&
-          validate.every(value => typeof value == "function"))
-      )
-    )
-      throw new Error(
-        "Validate must be an object, a function, or an array of functions"
-      );
-    if (this.options.hasOwnProperty("onError") && typeof onError != "function")
-      throw new Error("onError must be a function")
+    if (this.options.hasOwnProperty("validate") && validate !== null && !(typeof validate == "object" || typeof validate == "function" || (Array.isArray(validate) && validate.every(value => typeof value == "function")))) throw new Error("Validate must be an object, a function, or an array of functions")
+    if (this.options.hasOwnProperty("onError") && typeof onError != "function") throw new Error("onError must be a function")
   }
   sanitize() {
     if (this.useSandhands !== true) return
-    if (!(this.input instanceof HTMLElement)) throw new Error("Can't find input ref!");
+    if (!(this.input instanceof HTMLElement)) throw new Error("Can't find input ref!")
     try {
       sanitize(this.input.value, this.sandhands)
     } catch (error) {
