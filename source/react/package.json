@@ -1,0 +1,18 @@
+{
+  "name": "defused-react",
+  "version": "1.0.0",
+  "description": "Simple, Flexible Forms for React",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react",
+    "form"
+  ],
+  "author": "L1lith",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^16.4.2"
+  }
+}
