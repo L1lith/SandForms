@@ -16,7 +16,7 @@ class Form extends Component {
     }
   }
   submit() {
-    for (let i = 0 i < this.inputs.length i++) {
+    for (let i = 0; i < this.inputs.length; i++) {
       const input = this.inputs[i]
       const error = input.sanitize()
       if (error)
