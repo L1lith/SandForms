@@ -1,17 +1,16 @@
-const {cloneElement, createElement} = React = require('react')
+const {cloneElement, createElement, Children} = require('react')
 
 const elementMap = {
   'input': require('../Input')
 }
 
-function interpretChildren(children) {
-  return React.Children.map(children, (child, index) => {
+function interpretChildren(inputChildren, hook) {
+  return Children.map(inputChildren, (child, index) => {
     const props = {...child.props, key: index}
     if (typeof child.type == 'string' && elementMap.hasOwnProperty(child.type)) {
+      if (child.type === 'input') props._hook = hook
       return createElement(elementMap[child.type], props)
     }
-
-    return cloneElement(child, props)
   })
 }
 
