@@ -1,6 +1,6 @@
 {
   "name": "sandforms-react",
-  "version": "1.0.13",
+  "version": "1.0.135",
   "description": "Simple, Flexible Forms for React",
   "main": "index.js",
   "scripts": {
