@@ -5,10 +5,6 @@ const React = require("react")
 class Form extends Component {
   constructor(props) {
     super(props)
-    this.inputs = []
-    this.children = interpretChildren(this.props.children, input =>
-      this.inputs.push(input)
-    )
   }
   onError(error, data) {
     if (typeof this.props.onError == "function") {
@@ -40,7 +36,11 @@ class Form extends Component {
     }
   }
   render() {
-    return createElement("form", {onSubmit: e => {e.preventDefault(); this.submit()}}, this.children)
+    this.inputs = []
+    const children = interpretChildren(this.props.children, input =>
+      this.inputs.push(input)
+    )
+    return createElement("form", {onSubmit: e => {e.preventDefault(); this.submit()}}, children)
   }
 }
 
