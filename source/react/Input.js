@@ -6,13 +6,14 @@ sandhandsOptions = sandhandsOptions.primitives
   .concat(sandhandsOptions.universal)
 
 const inputOptions = ["onError"]
+const allowedInputTypes = ['text', 'password', 'email', 'search']
 
 class Input extends Component {
   constructor(props) {
     super(props)
     this.childProps = { ...props }
     // Prevent The Props from being interpreted as options when using vanilla mode
-    if (this.childProps.vanilla === true) {
+    if (this.childProps.vanilla === true || (typeof this.childProps.type == 'string' && !allowedInputTypes.includes(this.childProps.type))) {
       this.options = { vanilla: true }
       delete this.childProps.vanilla
       return;
@@ -65,10 +66,8 @@ class Input extends Component {
   sanitize() {
     if (this.useSandhands !== true) return
     if (!(this.input instanceof HTMLElement)) throw new Error("Can't find input ref!");
-    const {value} = this.input
-    if (typeof value != 'string') return // Not A String Input
     try {
-      sanitize(value, this.sandhands)
+      sanitize(this.input.value, this.sandhands)
     } catch (error) {
       if (this.options.onError) this.options.onError(error.message)
       return error
