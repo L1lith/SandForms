@@ -25,7 +25,7 @@ class Login extends React.Component {
     	console.log(`Got username "${username}", and password "${password}".`)
   }
   error(error){
-  	console.log(`Got error "${error}")
+  	console.log(`Got error "${error}"`)
   }
   render() {
     return (
