@@ -5,6 +5,9 @@ const React = require("react")
 class Form extends Component {
   constructor(props) {
     super(props)
+    this.formElementProps = {...props}
+    delete this.formElementProps.onSubmit
+    delete this.formElementProps.onError
   }
   onError(error, data) {
     if (typeof this.props.onError == "function") {
@@ -40,7 +43,7 @@ class Form extends Component {
     const children = interpretChildren(this.props.children, input =>
       this.inputs.push(input)
     )
-    return createElement("form", {onSubmit: e => {e.preventDefault(); this.submit()}}, children)
+    return createElement("form", {...this.formElementProps, onSubmit: e => {e.preventDefault(); this.submit()}}, children)
   }
 }
 
