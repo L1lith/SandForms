@@ -21,20 +21,20 @@ import {Form} from 'sandforms-react'
 import React, {Component} from 'react'
 
 class Login extends React.Component {
-	submit({username, password}) {
+  submit({username, password}) {
     	console.log(`Got username "${username}", and password "${password}".`)
-    }
-    error(error){
-    	console.log(`Got error "${error}")
-    }
+  }
+  error(error){
+  	console.log(`Got error "${error}")
+  }
 	render() {
-    	return (
-        	<Form onSubmit={this.submit} onError={this.error}>
-        		<input name="username" minLength={3} maxLength={25} regex={/^[a-zA_Z0-9]+$/}/>
-                <input name="password" type="password" minLength={8}/>
-        	</Form>
-        )
-    }
+    return (
+      <Form onSubmit={this.submit} onError={this.error}>
+      	<input name="username" minLength={3} maxLength={25} regex={/^[a-zA_Z0-9]+$/}/>
+        <input name="password" type="password" minLength={8}/>
+      </Form>
+    )
+  }
 }
 export default Login
 ```
