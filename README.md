@@ -32,6 +32,7 @@ class Login extends React.Component {
       <Form onSubmit={this.submit} onError={this.error}>
       	<input name="username" minLength={3} maxLength={25} regex={/^[a-zA_Z0-9]+$/}/>
         <input name="password" type="password" minLength={8}/>
+        <input type="submit"/>
       </Form>
     )
   }
