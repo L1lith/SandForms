@@ -18,7 +18,7 @@ npm i -s sandforms-react
 #### Example Usage
 ```js
 import {Form} from 'sandforms-react'
-import React, {Component} from 'react`
+import React, {Component} from 'react'
 
 class Login extends React.Component {
 	submit({username, password}) {
