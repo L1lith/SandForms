@@ -27,7 +27,7 @@ class Login extends React.Component {
   error(error){
   	console.log(`Got error "${error}")
   }
-	render() {
+  render() {
     return (
       <Form onSubmit={this.submit} onError={this.error}>
       	<input name="username" minLength={3} maxLength={25} regex={/^[a-zA_Z0-9]+$/}/>
