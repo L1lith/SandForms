@@ -26,13 +26,15 @@ class Form extends Component {
     }
     if (typeof this.props.onSubmit == "function") {
       const output = {}
+      console.log(this.inputs)
       this.inputs.forEach(input => {
         const { name } = input.input
+        const value = input.input.value
         if (name) {
-          output[name] = input.input.value
+          output[name] = value
         } else {
           if (!output.hasOwnProperty("unknown")) output.unknown = []
-          output.unknown.push(input.input.value)
+          output.unknown.push(value)
         }
       })
       this.props.onSubmit(output)
