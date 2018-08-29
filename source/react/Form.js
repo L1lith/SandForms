@@ -14,8 +14,8 @@ class Form extends Component {
     }
   }
   submit() {
-    for (let i = 0; i < this.inputs.length; i++) {
-      const input = this.inputs[i]
+    for (let i = 0; i < this.state.inputs.length; i++) {
+      const input = this.state.inputs[i]
       const element = input.getElement()
       if (element.value === undefined) return this.onError('Input Value Undefined', element)
       const error = input.sanitize()
@@ -23,7 +23,7 @@ class Form extends Component {
     }
     if (typeof this.props.onSubmit == "function") {
       const output = {}
-      this.inputs.forEach(input => {
+      this.state.inputs.forEach(input => {
         const element = input.getElement()
         const { name, value } = element
         if (name) {

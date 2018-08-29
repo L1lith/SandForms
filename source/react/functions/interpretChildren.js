@@ -6,7 +6,7 @@ function interpretChildren(inputChildren, hook) {
   return Children.map(inputChildren, (child, index) => {
     if (child === null) return null
     const props = {...(child.props || {}), key: index}
-    if (child.type instanceof Input) {
+    if (child.type === Input) {
       props._hook = hook
       return createElement(Input, props)
     }
