@@ -43,16 +43,13 @@ class Input extends Component {
     } else {
       childProps.ref = ref => {this.input = ref}
     }
-    return {sandhands, childProp}
+    return {sandhands, childProps}
   }
   validateOptions(options=this.options) {
-    const { vanilla, validate, onError } = options
-    if (options.hasOwnProperty("vanilla") && typeof vanilla != "boolean") throw new Error("Vanilla must be a boolean value")
-    if (options.hasOwnProperty("validate") && validate !== null && !(typeof validate == "object" || typeof validate == "function" || (Array.isArray(validate) && validate.every(value => typeof value == "function")))) throw new Error("Validate must be an object, a function, or an array of functions")
+    const { onError } = options
     if (options.hasOwnProperty("onError") && typeof onError != "function") throw new Error("onError must be a function")
   }
   sanitize() {
-    if (this.useSandhands !== true) return
     if (!(this.input instanceof HTMLElement)) throw new Error("Can't find input ref!")
     try {
       sanitize(this.input.value, this.sandhands)
@@ -62,8 +59,8 @@ class Input extends Component {
     }
   }
   render() {
-    const {options, sandhands, childProps} = Object.assign(this, this.interpretProps(this.props))
-    this.validateOptions()
+    const {options, sandhands, childProps} = this.interpretProps(this.props)
+    this.options = options
     return createElement("input", childProps)
   }
 }
