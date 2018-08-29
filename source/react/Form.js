@@ -36,9 +36,9 @@ class Form extends Component {
       this.props.onSubmit(output)
     }
   }
-  getDerivedStateFromProps(props) {
+  static getDerivedStateFromProps(props) {
     const inputs = []
-    const children = interpretChildren(this.props.children, input =>
+    const children = interpretChildren(props.children, input =>
       inputs.push(input)
     )
     const elementProps = {...props}
@@ -47,7 +47,7 @@ class Form extends Component {
     return {children, inputs, elementProps}
   }
   render() {
-    return createElement("form", {...this.state.elementProps, onSubmit: e => {e.preventDefault(); this.submit()}}, children)
+    return createElement("form", {...this.state.elementProps, onSubmit: e => {e.preventDefault(); this.submit()}}, this.state.children)
   }
 }
 
