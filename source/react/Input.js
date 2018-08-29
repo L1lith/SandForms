@@ -58,6 +58,10 @@ class Input extends Component {
       return error
     }
   }
+  getElement() {
+    if (!(this.input instanceof HTMLElement)) throw new Error('Unable to detect input HTML element')
+    return this.input
+  }
   render() {
     const {options, sandhands, childProps} = this.interpretProps(this.props)
     this.options = options

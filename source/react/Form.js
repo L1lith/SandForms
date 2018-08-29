@@ -9,27 +9,24 @@ class Form extends Component {
     delete this.formElementProps.onSubmit
     delete this.formElementProps.onError
   }
-  onError(error, data) {
+  onError(error, element) {
     if (typeof this.props.onError == "function") {
-      this.props.onError(error.message, data)
+      this.props.onError(error.message, element)
     }
   }
   submit() {
     for (let i = 0; i < this.inputs.length; i++) {
       const input = this.inputs[i]
+      const element = input.getElement()
+      if (element.value === undefined) return this.onError('Input Value Undefined', element)
       const error = input.sanitize()
-      if (error)
-        return this.onError(error, {
-          input: input.input,
-          value: input.input.value
-        })
+      if (error) return this.onError(error, element)
     }
     if (typeof this.props.onSubmit == "function") {
       const output = {}
-      console.log(this.inputs)
       this.inputs.forEach(input => {
-        const { name } = input.input
-        const value = input.input.value
+        const element = input.getElement()
+        const { name, value } = element
         if (name) {
           output[name] = value
         } else {
