@@ -1,13 +1,12 @@
 const { Component, createElement } = require("react")
 const interpretChildren = require("./functions/interpretChildren")
 const React = require("react")
+const autoBind = require("auto-bind")
 
 class Form extends Component {
   constructor(props) {
     super(props)
-    this.formElementProps = {...props}
-    delete this.formElementProps.onSubmit
-    delete this.formElementProps.onError
+    autoBind(this)
   }
   onError(error, element) {
     if (typeof this.props.onError == "function") {
@@ -15,7 +14,6 @@ class Form extends Component {
     }
   }
   submit() {
-    console.log(this.inputs)
     for (let i = 0; i < this.inputs.length; i++) {
       const input = this.inputs[i]
       const element = input.getElement()
@@ -38,12 +36,18 @@ class Form extends Component {
       this.props.onSubmit(output)
     }
   }
-  render() {
-    this.inputs = []
+  getDerivedStateFromProps(props) {
+    const inputs = []
     const children = interpretChildren(this.props.children, input =>
-      this.inputs.push(input)
+      inputs.push(input)
     )
-    return createElement("form", {...this.formElementProps, onSubmit: e => {e.preventDefault(); this.submit()}}, children)
+    const elementProps = {...props}
+    delete elementProps.onSubmit
+    delete elementProps.onError
+    return {children, inputs, elementProps}
+  }
+  render() {
+    return createElement("form", {...this.state.elementProps, onSubmit: e => {e.preventDefault(); this.submit()}}, children)
   }
 }
 

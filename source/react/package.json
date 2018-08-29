@@ -13,6 +13,7 @@
   "author": "L1lith",
   "license": "MIT",
   "dependencies": {
+    "auto-bind": "^1.2.1",
     "react": "^16.4.2",
     "sandhands": "^1.3.51"
   }
