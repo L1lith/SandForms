@@ -1,6 +1,6 @@
 const {cloneElement, createElement, Children} = require('react')
 
-const Input = require('./input')
+const Input = require('../Input')
 
 function interpretChildren(inputChildren, hook) {
   return Children.map(inputChildren, (child, index) => {
