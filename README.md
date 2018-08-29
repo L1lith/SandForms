@@ -17,8 +17,8 @@ npm i -s sandforms-react
 
 #### Example Usage
 ```js
-import {Form} from 'sandforms-react'
-import React, {Component} from 'react'
+import {Form, Input} from 'sandforms-react'
+import React from 'react'
 
 class Login extends React.Component {
   submit({username, password}) {
@@ -30,8 +30,8 @@ class Login extends React.Component {
   render() {
     return (
       <Form onSubmit={this.submit} onError={this.error}>
-      	<input name="username" minLength={3} maxLength={25} regex={/^[a-zA_Z0-9]+$/}/>
-        <input name="password" type="password" minLength={8}/>
+      	<Input name="username" minLength={3} maxLength={25} regex={/^[a-zA_Z0-9]+$/}/>
+        <Input name="password" type="password" minLength={8}/>
         <input type="submit"/>
       </Form>
     )
