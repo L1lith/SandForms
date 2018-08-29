@@ -15,6 +15,7 @@ class Form extends Component {
     }
   }
   submit() {
+    console.log(this.inputs)
     for (let i = 0; i < this.inputs.length; i++) {
       const input = this.inputs[i]
       const element = input.getElement()
