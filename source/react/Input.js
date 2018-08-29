@@ -15,43 +15,41 @@ class Input extends Component {
   interpretProps(props=this.props) {
     let sandhands = { _: String }
     let childProps = { ...props }
-    let options = {useSandhands: false}
-    delete childProps.vanilla
     delete childProps._hook
-    // Prevent The Props from being interpreted as options when using vanilla mode
-    if (props.vanilla === true || (typeof childProps.type == 'string' && !allowedInputTypes.includes(childProps.type))) {
-      options.vanilla = true
-    } else {
-      // Interpret the options from the props
-      Object.keys(props).forEach(prop => {
-        if (sandhandsOptions.includes(prop)) {
-          sandhands[prop] = childProps[prop]
-          delete childProps[prop]
-        } else if (inputOptions.includes(prop)) {
-          options[prop] = childProps[prop]
-          delete childProps[prop]
-        }
-      })
-      options.useSandhands = Object.keys(sandhands).length > 0
-      if (typeof props._hook == "function") props._hook(this)
-      // Get the input ref
-      if (typeof childProps.ref == "function") {
-        const propRefHandler = childProps.ref
-        childProps.ref = ref => {
-          propRefHandler(ref)
-          this.input = ref
-        }
-      } else {
-        childProps.ref = ref => {this.input = ref}
-      }
+    let options = {}
+    // Interpret the options from the props for sandhands
+    if (props.hasOwnProperty('customFormat')) {
+      if (typeof props.customFormat != 'string' || props.customFormat.length < 1) throw new Error('Custom Format Must Be a String!')
+      sandhands._ = props.customFormat
+      delete childProps.customFormat
     }
-    return {sandhands, childProps, options}
+    Object.keys(props).forEach(prop => {
+      if (sandhandsOptions.includes(prop)) {
+        sandhands[prop] = childProps[prop]
+        delete childProps[prop]
+      } else if (inputOptions.includes(prop)) {
+        options[prop] = childProps[prop]
+        delete childProps[prop]
+      }
+    })
+    if (typeof props._hook == "function") props._hook(this)
+    // Get the input ref
+    if (typeof childProps.ref == "function") {
+      const propRefHandler = childProps.ref
+      childProps.ref = ref => {
+        propRefHandler(ref)
+        this.input = ref
+      }
+    } else {
+      childProps.ref = ref => {this.input = ref}
+    }
+    return {sandhands, childProp}
   }
-  validateOptions(options) {
+  validateOptions(options=this.options) {
     const { vanilla, validate, onError } = options
-    if (this.options.hasOwnProperty("vanilla") && typeof vanilla != "boolean") throw new Error("Vanilla must be a boolean value")
-    if (this.options.hasOwnProperty("validate") && validate !== null && !(typeof validate == "object" || typeof validate == "function" || (Array.isArray(validate) && validate.every(value => typeof value == "function")))) throw new Error("Validate must be an object, a function, or an array of functions")
-    if (this.options.hasOwnProperty("onError") && typeof onError != "function") throw new Error("onError must be a function")
+    if (options.hasOwnProperty("vanilla") && typeof vanilla != "boolean") throw new Error("Vanilla must be a boolean value")
+    if (options.hasOwnProperty("validate") && validate !== null && !(typeof validate == "object" || typeof validate == "function" || (Array.isArray(validate) && validate.every(value => typeof value == "function")))) throw new Error("Validate must be an object, a function, or an array of functions")
+    if (options.hasOwnProperty("onError") && typeof onError != "function") throw new Error("onError must be a function")
   }
   sanitize() {
     if (this.useSandhands !== true) return
@@ -64,9 +62,8 @@ class Input extends Component {
     }
   }
   render() {
-    const {options, sandhands, childProps} = this.interpretProps(this.props)
-    validateOptions(options)
-    const {useSandhands, vanilla} = options
+    const {options, sandhands, childProps} = Object.assign(this, this.interpretProps(this.props))
+    this.validateOptions()
     return createElement("input", childProps)
   }
 }

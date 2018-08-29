@@ -1,3 +1,4 @@
 const Form = require('./Form')
+const Input = require('./Input')
 
-module.exports = {Form}
+module.exports = {Form, Input}
