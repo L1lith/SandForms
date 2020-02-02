@@ -1,7 +1,6 @@
 const { Component, createElement } = require("react")
-const { sanitize } = require("sandhands")
+const { sanitize, allowedOptions } = require("sandhands")
 const autoBind = require('auto-bind')
-let sandhandsOptions = require("sandhands/source/validate/allowedOptions")
 sandhandsOptions = sandhandsOptions.primitives
   .get(String)
   .concat(sandhandsOptions.universal)
