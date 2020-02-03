@@ -44,9 +44,13 @@ The Form element is the base of every form. It has a number of different options
 Provide a function to be called once the form has been validly submitted.
 ##### onError (function)
 Provide a function to be called when the form has been invalidly submitted.
-##### displayErrors
+##### displayErrors (boolean)
 Flag as false to have Sandforms not output error messages to the end user inside the form.
-##### catchSubmit
+##### displayMessage (function)
+Provide a callback to be provided a function to manually display a message inside the form
+##### displayError (function)
+Provide a callback to be provided a function to manually display an error message inside the form
+##### catchSubmit (boolean)
 Flag as false to have Sandforms not output error messages from your onSubmit function to the end user.
 
 ### Compatability
