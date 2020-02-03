@@ -14,7 +14,7 @@
   "license": "MIT",
   "dependencies": {
     "auto-bind": "^1.2.1",
-    "react": "^16.4.2",
-    "sandhands": "^1.5.0"
+    "react": "^16.12.0",
+    "sandhands": "^1.5.1"
   }
 }
