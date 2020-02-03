@@ -1,16 +1,36 @@
 const { Component, createElement } = require("react")
-const interpretChildren = require("./functions/interpretChildren")
 const React = require("react")
 const autoBind = require("auto-bind")
+const interpretChildren = require("./functions/interpretChildren")
+const titleCase = require('./functions/titleCase')
+
+const allowedFormProps = ["onSubmit", "onError", "displayErrors", "displayError", "catchSubmit"]
 
 class Form extends Component {
   constructor(props) {
     super(props)
     autoBind(this)
+    this.state = {errorDisplay: null}
+    this.displayErrorFunction = errorMessage =>{
+      if (typeof errorMessage != 'string' && !(errorMessage instanceof Error)) throw new Error("Error to Display must be a string or an Error object")
+      if (errorMessage instanceof Error) errorMessage = "Error: " + errorMessage.message
+      this.setState({errorDisplay: errorMessage})
+    }
   }
-  onError(error, element) {
+  onError(error, element=null) {
+    if (this.props.displayErrors !== false) {
+      let errorDisplay = error.message
+      if (element.name) {
+        errorDisplay = titleCase(element.name) + ": " + errorDisplay
+      } else {
+        errorDisplay = "Error: " + errorDisplay
+      }
+      this.setState({errorDisplay})
+    }
     if (typeof this.props.onError == "function") {
       this.props.onError(error.message, element)
+    } else if (this.props.displayErrors === false) {
+      console.warn("Unhandled Error, please provide an onError handler for your Form.", error)
     }
   }
   submit() {
@@ -21,6 +41,7 @@ class Form extends Component {
       const error = input.sanitize()
       if (error) return this.onError(error, element)
     }
+    this.setState({errorDisplay: null})
     if (typeof this.props.onSubmit == "function") {
       const output = {}
       this.state.inputs.forEach(input => {
@@ -33,7 +54,16 @@ class Form extends Component {
           output.unknown.push(value)
         }
       })
-      this.props.onSubmit(output)
+      try {
+        const submitOutput = this.props.onSubmit(output)
+        if (submitOutput instanceof Promise) {
+          if (this.props.catchSubmit !== false) submitOutput.catch(this.displayErrorFunction)
+        }
+      } catch(error) {
+        if (this.props.catchSubmit !== false) this.displayErrorFunction(error)
+      }
+    } else {
+      console.warn("Missing onSubmit Function!")
     }
   }
   static getDerivedStateFromProps(props) {
@@ -42,12 +72,28 @@ class Form extends Component {
       inputs.push(input)
     )
     const elementProps = {...props}
-    delete elementProps.onSubmit
-    delete elementProps.onError
+
+    allowedFormProps.forEach(prop => {
+      if (elementProps.hasOwnProperty(prop)) delete elementProps[prop]
+    })
+
     return {children, inputs, elementProps}
   }
   render() {
-    return createElement("form", {...this.state.elementProps, onSubmit: e => {e.preventDefault(); this.submit()}}, this.state.children)
+    const formProps = {...this.state.elementProps, onSubmit: e => {e.preventDefault(); this.submit()}}
+
+    const childArgs = []
+
+    if (this.props.hasOwnProperty("displayError") && this.props.displayError !== null) {
+      if (typeof this.props.displayError != 'function') throw new Error("displayError must be a callback function or null")
+      this.props.displayError(this.displayErrorFunction)
+    }
+    if (typeof this.state.errorDisplay == 'string') {
+      childArgs.push(createElement("span", {className: "error"}, this.state.errorDisplay))
+    }
+    childArgs.push(this.state.children)
+
+    return createElement("form", formProps, ...childArgs)
   }
 }
 

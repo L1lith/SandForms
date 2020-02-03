@@ -1,9 +1,9 @@
 const { Component, createElement } = require("react")
 const { sanitize, allowedOptions } = require("sandhands")
 const autoBind = require('auto-bind')
-sandhandsOptions = sandhandsOptions.primitives
+const sandhandsOptions = allowedOptions.primitives
   .get(String)
-  .concat(sandhandsOptions.universal)
+  .concat(allowedOptions.universal)
 
 const inputOptions = ["onError"]
 const allowedInputTypes = ['text', 'password', 'email', 'search']
