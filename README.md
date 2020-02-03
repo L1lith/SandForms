@@ -14,7 +14,7 @@ import React from 'react'
 class Login extends React.Component {
   render() {
     return (
-      <Form onSubmit={submit} onError={this.error}>
+      <Form onSubmit={submit}>
       	<Input name="username" minLength={3} maxLength={25} regex={/^[a-zA_Z0-9]+$/}/>
         <Input name="password" type="password" minLength={8}/>
         <input type="submit"/>
