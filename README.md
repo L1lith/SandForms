@@ -34,8 +34,20 @@ function submit({username, password}) {
 export default Login
 ```
 
-#### Input Validation
-SandForms uses [Sandhands](https://github.com/L1lith/Sandhands) to provide advanced input validation. To read more about the validation options see the [strings format](https://l1lith.github.io/Sandhands/format) in the Sandhands documentation.
+#### The Input Element
+SandForms uses [Sandhands](https://github.com/L1lith/Sandhands) to provide advanced input validation. To read more about the validation options see the [strings format](https://l1lith.github.io/Sandhands/format) in the Sandhands documentation. Simply supply your sanitization parameters as props to the Input element.
+
+#### The Form Element
+The Form element is the base of every form. It has a number of different options available to you. You can supply them via the Form element's props.
+
+##### onSubmit (function)
+Provide a function to be called once the form has been validly submitted.
+##### onError (function)
+Provide a function to be called when the form has been invalidly submitted.
+##### displayErrors
+Flag as false to have Sandforms not output error messages to the end user inside the form.
+##### catchSubmit
+Flag as false to have Sandforms not output error messages from your onSubmit function to the end user.
 
 ### Compatability
 Currently SandForms only supports react, however there are plans for vanilla JS support in the future.
