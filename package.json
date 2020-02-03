@@ -2,7 +2,7 @@
   "name": "sandforms",
   "version": "1.0.0",
   "description": "Simple, Flexible Forms for React",
-  "main": "index.js",
+  "main": "source/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
