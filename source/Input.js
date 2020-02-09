@@ -19,6 +19,7 @@ class Input extends Component {
   }
   sanitize() {
     if (!(this.input instanceof HTMLElement)) throw new Error("Can't find input ref!")
+    if (this.input.type === "checkbox") return // Do not sanitize checkboxes
     try {
       sanitize(this.input.value, this.sandhands)
     } catch (error) {

@@ -4,17 +4,13 @@ const autoBind = require("auto-bind")
 const interpretChildren = require("./functions/interpretChildren")
 const titleCase = require('./functions/titleCase')
 
-const allowedFormProps = ["onSubmit", "onError", "displayErrors", "displayError", "displayMessage", "catchSubmit"]
+const allowedFormProps = ["onSubmit", "onError", "displayErrors", "displayError", "catchSubmit"]
 
 class Form extends Component {
   constructor(props) {
     super(props)
     autoBind(this)
-    this.state = {errorDisplay: null, messageDisplay: null}
-    this.displayMessageFunction = message => {
-      if (typeof message != 'string' && message !== null) throw new Error("Message must be a string or null")
-      this.setState({messageDisplay: message})
-    }
+    this.state = {errorDisplay: null}
     this.displayErrorFunction = errorMessage =>{
       if (typeof errorMessage != 'string' && !(errorMessage instanceof Error)) throw new Error("Error to Display must be a string or an Error object")
       if (errorMessage instanceof Error) errorMessage = "Error: " + errorMessage.message
@@ -45,14 +41,18 @@ class Form extends Component {
       const error = input.sanitize()
       if (error) return this.onError(error, element)
     }
-    this.setState({errorDisplay: null, messageDisplay: null})
+    this.setState({errorDisplay: null})
     if (typeof this.props.onSubmit == "function") {
       const output = {}
       this.state.inputs.forEach(input => {
         const element = input.getElement()
-        const { name, value } = element
+        const { name, value, type } = element
         if (name) {
-          output[name] = value
+          if (type === "checkbox") {
+            output[name] = element.checked
+          } else {
+            output[name] = value
+          }
         } else {
           if (!output.hasOwnProperty("unknown")) output.unknown = []
           output.unknown.push(value)
@@ -88,19 +88,12 @@ class Form extends Component {
 
     const childArgs = []
 
-
     if (this.props.hasOwnProperty("displayError") && this.props.displayError !== null) {
       if (typeof this.props.displayError != 'function') throw new Error("displayError must be a callback function or null")
       this.props.displayError(this.displayErrorFunction)
     }
-    if (this.props.hasOwnProperty("displayMessage") && this.props.displayMessage !== null) {
-      if (typeof this.props.displayMessage != 'function') throw new Error("displayMessage must be a callback function or null")
-      this.props.displayMessage(this.displayMessageFunction)
-    }
     if (typeof this.state.errorDisplay == 'string') {
       childArgs.push(createElement("span", {className: "error"}, this.state.errorDisplay))
-    } else if (typeof this.state.messageDisplay == 'string') {
-      childArgs.push(createElement("span", {className: "message"}, this.state.messageDisplay))
     }
     childArgs.push(this.state.children)
 
